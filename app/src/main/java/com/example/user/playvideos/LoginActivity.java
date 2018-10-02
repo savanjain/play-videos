@@ -30,8 +30,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     Button login;
-  //  private ProgressDialog pDialog;
-  //  private static String[] PERMISSIONS_CONTACT = {android.Manifest.permission.GET_ACCOUNTS, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.WRITE_CONTACTS};
+  
+  
     Context context;
 
     SignInButton googlelogin;
@@ -134,26 +134,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-   /* @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        if (requestCode == REQUEST_CONTACTS) {
-            //    Log.i(TAG, "Received response for contact permissions request.");
-
-            // We have requested multiple permissions for contacts, so all of them need to be
-            // checked.
-            if (PermissionUtil.verifyPermissions(grantResults))
-            {
-                // All required permissions have been granted, display contacts fragment.
-                signIn();
-            } else
-            {
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }*/
+ 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -199,22 +180,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             });
 
 
-            //seting profile information into global variables to access
-           /* Global.addPrefs(context.getApplicationContext(),"name",acct.getDisplayName());
-
-            Global.addPrefs(context.getApplicationContext(),"UEmail",acct.getEmail());
-            Global.addPrefs(getApplicationContext(), "login_flag", "Y");*/
-
-          /*  pDialog = new ProgressDialog(context);
-            pDialog.setMessage("Please wait...");
-            pDialog.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.style));
-            pDialog.setCancelable(true);
-            //  pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.show();
-
-            Intent in=new Intent(MainActivity.this,HomePage.class);
-            startActivity(in);
-            finish();*/
+     
+          
 
 
         } else
