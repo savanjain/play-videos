@@ -16,16 +16,36 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 public class PlayVideosActivity extends AppCompatActivity {
 
-    VideoView playvideo;
+    SimpleExoPlayerView playvideo;
+    SimpleExoPlayer player;
+
     Uri uri;
     ListVideoAdapter listVideoAdapter;
     LinearLayoutManager llm;
     RecyclerView rv;
     TextView title,description;
+    DataSource.Factory dataSourceFactory;
+    ExtractorsFactory extractorsFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +62,31 @@ public class PlayVideosActivity extends AppCompatActivity {
         rv.setAdapter(listVideoAdapter);
         rv.setLayoutManager(llm);
 
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector =
+                new DefaultTrackSelector(videoTrackSelectionFactory);
 
-        MediaController mc = new MediaController(PlayVideosActivity.this);
-        mc.setAnchorView(playvideo);
-        mc.setMediaPlayer(playvideo);
+        //Initialize the player
+        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+        playvideo.setPlayer(player);
+        dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "CloudinaryExoplayer"));
+
+        // Produces Extractor instances for parsing the media data.
+         extractorsFactory = new DefaultExtractorsFactory();
+
+
+      //  MediaController mc = new MediaController(PlayVideosActivity.this);
+    //    mc.setAnchorView(playvideo);
+   //     mc.setMediaPlayer(playvideo);
         uri=Uri.parse(Global.userData.getUrl());
-        playvideo.setMediaController(mc);
-        playvideo.setVideoURI(uri);
-        playvideo.start();
+        MediaSource videoSource = new ExtractorMediaSource(uri,
+                dataSourceFactory, extractorsFactory, null, null);
+        player.prepare(videoSource);
+    //    playvideo.setMediaController(mc);
+    //    playvideo.setVideoURI(uri);
+     //   playvideo.start();
        /* playvideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,13 +139,16 @@ public class PlayVideosActivity extends AppCompatActivity {
             memberViewHolder.l1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MediaController mc = new MediaController(PlayVideosActivity.this);
-                    mc.setAnchorView(playvideo);
-                    mc.setMediaPlayer(playvideo);
+                  //  MediaController mc = new MediaController(PlayVideosActivity.this);
+                 //   mc.setAnchorView(playvideo);
+                 //   mc.setMediaPlayer(playvideo);
+
                     uri=Uri.parse(userData.getUrl());
-                    playvideo.setMediaController(mc);
-                    playvideo.setVideoURI(uri);
-                    playvideo.start();
+                    MediaSource videoSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+                    player.prepare(videoSource);
+                  //  playvideo.setMediaController(mc);
+                   // playvideo.setVideoURI(uri);
+                  //  playvideo.start();
                     title.setText(userData.getTitle());
                     description.setText(userData.getDescription());
                 }
